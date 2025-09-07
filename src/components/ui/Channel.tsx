@@ -10,12 +10,12 @@ interface ChannelProps {
 
 const Channel = ({ canalNumber, alt, ...props }: ChannelProps) => {
 	return (
-		<div className=" md:w-[300px] p-1 flex items-center  bg-epg-eerie-black">
-			<div className="ml-6 font-font-bold text-lg w-full">
+		<div className="h-full w-full  grid grid-cols-2 items-center gap-5 justify-center bg-epg-eerie-black">
+			<div className="font-font-bold text-epg-baby-powder text-balance p-2 ">
 				<span>{canalNumber}</span>
 			</div>
-			<div className="p-1">
-				<Image {...props} width={250} height={250} />
+			<div className="">
+				<Image className="w-[80%]" {...props} width={250} height={250} />
 			</div>
 		</div>
 	);

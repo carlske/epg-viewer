@@ -6,11 +6,10 @@ interface ButtonProps
 	children: React.ReactNode;
 	className?: string;
 	variant?: "default" | "secondary" | "ghost";
-	size?: "default" | "sm" | "lg";
+	size?: "default" | "sm" | "lg" | "icon";
 }
 
-const baseStyles =
-	"cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-all disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-ring/50";
+const baseStyles = "cursor-pointer inline-flex items-center justify-center   ";
 
 const variantStyles: Record<string, string> = {
 	default: "bg-primary text-primary-foreground  hover:bg-primary/90",

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { parseChannelResponse } from "@/adapters/epgAdapter";
+import { parseEpgEntry } from "@/adapters/epgAdapter";
 import { fetchEpgRepository } from "@/data/epgRepository";
 
 const useEpgData = () => {
@@ -7,7 +7,7 @@ const useEpgData = () => {
 		queryKey: ["epgData"],
 		queryFn: async () => {
 			const response = await fetchEpgRepository();
-			return parseChannelResponse(response);
+			return parseEpgEntry(response);
 		},
 		staleTime: 1000 * 60 * 60 * 24, // 24 hours
 	});

@@ -11,9 +11,12 @@ type DialogProps = {
 
 const EpgDialog = ({ open, onClose }: DialogProps) => {
 	const { data, error } = useEpgData();
-	const setChannels = useEpgStore((state) => state.setChannels);
 
-	setChannels(data || []);
+	const setEntry = useEpgStore((state) => state.setEntry);
+
+	if (data) {
+		setEntry(data);
+	}
 
 	return (
 		<Dialog open={open} onClose={onClose}>

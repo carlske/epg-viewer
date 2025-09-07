@@ -5,11 +5,9 @@ interface ProgramProps {
 
 const Program = ({ name, time }: ProgramProps) => {
 	return (
-		<div className="bg-epg-baby-powder border-2 border-epg-eerie-black p-4  w-full h-full flex flex-col justify-center">
-			<div>
-				<span>{name}</span>
-				<span>{time}</span>
-			</div>
+		<div className="bg-epg-eerie-black border-1 hover:bg-gray-700  border-gray-700 p-4 flex flex-col justify-center">
+			<span>{name}</span>
+			<span>{time}</span>
 		</div>
 	);
 };

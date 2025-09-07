@@ -1,14 +1,14 @@
 import { create } from "zustand";
-import type { Channel } from "@/types/epg";
+import type { EpgApiResponse } from "@/types/epg";
 
 type EpgStore = {
-	channels: Channel[];
-	setChannels: (channels: Channel[]) => void;
+	entry: EpgApiResponse;
+	setEntry: (entry: EpgApiResponse) => void;
 };
 
 const useEpgStore = create<EpgStore>((set) => ({
-	channels: [],
-	setChannels: (channels) => set({ channels }),
+	entry: {} as EpgApiResponse,
+	setEntry: (entry: EpgApiResponse) => set({ entry }),
 }));
 
 export default useEpgStore;

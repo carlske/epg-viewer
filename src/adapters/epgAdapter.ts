@@ -1,4 +1,6 @@
 import { z } from "zod";
+import type { EpgApiResponse } from "@/types/epg";
+
 const EventSchema = z.object({
 	channel_id: z.string(),
 	id: z.string(),
@@ -32,8 +34,23 @@ const ChannelSchema = z.object({
 	events: z.array(EventSchema),
 });
 
-export function parseChannelResponse(response: unknown) {
-	const result = z.array(ChannelSchema).safeParse(response);
-	if (!result.success) return [];
-	return result.data;
+export const EpgEntrySchema = z.object({
+	date_from: z.string().optional(),
+	date_to: z.string().optional(),
+	quantity: z.string().optional(),
+});
+
+export const EpgApiResponseSchema = z.object({
+	entry: EpgEntrySchema,
+	response: z.object({
+		channels: z.array(ChannelSchema),
+	}),
+});
+
+export function parseEpgEntry(data: unknown): EpgApiResponse | null {
+	const result = EpgApiResponseSchema.safeParse(data);
+	if (result.success) {
+		return result.data as EpgApiResponse;
+	}
+	return null;
 }
