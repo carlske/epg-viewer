@@ -1,3 +1,6 @@
+import { Suspense } from "react";
+import useEpgData from "@/hooks/useEpgData";
+import useEpgStore from "@/store/useepgStore";
 import { Dialog } from "../ui/Dialog";
 import Epgcontent from "./internal/EpgContent";
 
@@ -7,9 +10,17 @@ type DialogProps = {
 };
 
 const EpgDialog = ({ open, onClose }: DialogProps) => {
+	const { data, error } = useEpgData();
+	const setChannels = useEpgStore((state) => state.setChannels);
+
+	setChannels(data || []);
+
 	return (
 		<Dialog open={open} onClose={onClose}>
-			<Epgcontent />
+			<Suspense fallback={<div>Loading...</div>}>
+				<Epgcontent />
+			</Suspense>
+			{error && <div>Error loading EPG data</div>}
 		</Dialog>
 	);
 };

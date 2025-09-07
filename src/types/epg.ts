@@ -1,34 +1,3 @@
-export interface Temperatures {
-	entry: Entry;
-	response: Response;
-	status: string;
-	msg: string;
-}
-
-export interface Entry {
-	device_id: string;
-	device_category: string;
-	device_model: string;
-	device_type: string;
-	device_so: string;
-	format: string;
-	device_manufacturer: string;
-	authpn: string;
-	authpt: string;
-	api_version: string;
-	region: string;
-	HKS: string;
-	user_id: string;
-	date_from: string;
-	date_to: string;
-	quantity: string;
-}
-
-export interface Response {
-	channels: Channel[];
-	total: number;
-}
-
 export interface Channel {
 	id: string;
 	number: string;
@@ -52,8 +21,8 @@ export interface Event {
 	name: Name;
 	description: null;
 	talent: null;
-	date_begin: DateBeginEnum;
-	date_end: DateBeginEnum;
+	date_begin: string;
+	date_end: string;
 	unix_begin: number;
 	unix_end: number;
 	duration: string;
@@ -95,33 +64,6 @@ export interface Event {
 	group_rel: null;
 	gmt: number;
 }
-
-export type DateBeginEnum =
-	| "2021/08/12 20:02:56"
-	| "2021/08/12 21:02:56"
-	| "2021/08/12 22:02:56"
-	| "2021/08/12 23:02:56"
-	| "2021/08/13 00:02:56"
-	| "2021/08/13 01:02:56"
-	| "2021/08/13 02:02:56"
-	| "2021/08/13 03:02:56"
-	| "2021/08/13 04:02:56"
-	| "2021/08/13 05:02:56"
-	| "2021/08/13 06:02:56"
-	| "2021/08/13 07:02:56"
-	| "2021/08/13 08:02:56"
-	| "2021/08/13 09:02:56"
-	| "2021/08/13 10:02:56"
-	| "2021/08/13 11:02:56"
-	| "2021/08/13 12:02:56"
-	| "2021/08/13 13:02:56"
-	| "2021/08/13 14:02:56"
-	| "2021/08/13 15:02:56"
-	| "2021/08/13 16:02:56"
-	| "2021/08/13 17:02:56"
-	| "2021/08/13 18:02:56"
-	| "2021/08/13 19:02:56"
-	| "2021/08/13 20:02:56";
 
 export type Name = "NA";
 

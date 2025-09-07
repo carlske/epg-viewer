@@ -1,3 +1,4 @@
+// biome-ignore assist/source/organizeImports: <IGNORE>
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import ProgramInfo from "../../components/epg/internal/program/ProgramInfo";
@@ -5,8 +6,8 @@ import "@testing-library/jest-dom";
 
 describe("ProgramInfo", () => {
 	const props = {
-		title: "Sample Program",
-		description: "This is a sample program description.",
+		title: "Sport Program",
+		description: "This is a Sport program description.",
 		time: "10:00 AM - 11:00 AM",
 	};
 

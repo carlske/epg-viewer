@@ -1,6 +1,8 @@
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
 import { Button } from "@/components/ui/Button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import useEpgStore from "@/store/useepgStore";
+import TimeLineChannels from "./TimeLineChannels";
 
 const TimeLineGrid = () => {
 	const pxPerMinute = 11;
@@ -8,6 +10,8 @@ const TimeLineGrid = () => {
 	const slotWidth = pxPerMinute * minutesPerSlot;
 
 	const scrollerRef = useRef<HTMLDivElement>(null);
+
+	console.log("setChannels function from store:", useEpgStore.getState());
 
 	const scrollBy = (delta: number) => {
 		const el = scrollerRef.current;
@@ -30,7 +34,10 @@ const TimeLineGrid = () => {
 	];
 
 	return (
-		<aside className="w-full h-full bg-black text-epg-baby-powder relative">
+		<aside className="w-full h-full flex  bg-black text-epg-baby-powder">
+			<div>
+				<TimeLineChannels />
+			</div>
 			<div className="text-white flex items-center fixed z-20 right-0 mt-[1px]">
 				<Button
 					variant="ghost"
@@ -49,7 +56,6 @@ const TimeLineGrid = () => {
 					<ChevronRight aria-hidden="true" size={20} />
 				</Button>
 			</div>
-
 			<div
 				ref={scrollerRef}
 				className="overflow-x-auto border-t border-neutral-700"

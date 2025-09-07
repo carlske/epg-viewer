@@ -13,11 +13,14 @@
 		"indentStyle": "tab"
 	},
 	"linter": {
-		"enabled": true,
 		"rules": {
-			"recommended": true,
-			"suspicious": {
-				"noUnknownAtRules": "warn"
+			"style": {
+				"useImportType": {
+					"level": "error",
+					"options": {
+						"style": "inlineType"
+					}
+				}
 			}
 		}
 	},
