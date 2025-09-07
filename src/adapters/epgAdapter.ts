@@ -1,5 +1,4 @@
 import { z } from "zod";
-
 const EventSchema = z.object({
 	channel_id: z.string(),
 	id: z.string(),
@@ -16,12 +15,9 @@ const EventSchema = z.object({
 });
 
 const CommonSchema = z.object({
-	id: z.string(),
-	title: z.string(),
 	image_large: z.string(),
 	image_medium: z.string(),
 	image_small: z.string(),
-	channel_number: z.string(),
 });
 
 const GroupSchema = z.object({
@@ -39,13 +35,5 @@ const ChannelSchema = z.object({
 export function parseChannelResponse(response: unknown) {
 	const result = z.array(ChannelSchema).safeParse(response);
 	if (!result.success) return [];
-	return result.data.map((ch) => ({
-		channel: {
-			id: ch.id,
-			number: ch.number,
-			name: ch.name,
-		},
-		images: ch.group.common,
-		events: ch.events,
-	}));
+	return result.data;
 }
