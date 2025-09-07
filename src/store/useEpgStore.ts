@@ -6,9 +6,9 @@ type EpgStore = {
 	setChannels: (channels: Channel[]) => void;
 };
 
-const useEpgData = create<EpgStore>((set) => ({
+const useEpgStore = create<EpgStore>((set) => ({
 	channels: [],
 	setChannels: (channels) => set({ channels }),
 }));
 
-export default useEpgData;
+export default useEpgStore;

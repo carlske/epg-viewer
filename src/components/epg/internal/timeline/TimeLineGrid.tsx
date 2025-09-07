@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
 import { Button } from "@/components/ui/Button";
-import useEpgStore from "@/store/useepgStore";
+import useEpgStore from "@/store/useEpgStore";
 import TimeLineChannels from "./TimeLineChannels";
 
 const TimeLineGrid = () => {
