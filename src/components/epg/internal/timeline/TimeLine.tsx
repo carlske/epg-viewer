@@ -74,7 +74,7 @@ const TimeLine = () => {
 					}}
 				></div>
 
-				<div className="flex flex-col sticky  bg-black left-0 h-full gap-1 [&>div]:w-[250px]  [&>div]:h-[100px] [&>div]:shrink-0">
+				<div className="flex flex-col sticky z-10  bg-black left-0 h-full gap-1 [&>div]:w-[250px]  [&>div]:h-[100px] [&>div]:shrink-0">
 					{channelsItems.map((virtual) => {
 						const ch = channelsList[virtual.index];
 						return (
@@ -99,146 +99,40 @@ const TimeLine = () => {
 				{/* Program Items */}
 				<div className="h-[100px] ml-[250px] border-2">
 					<div
-						className="flex flex-row  flex-nowrap gap-1 overflow-x-auto overflow-y-auto
-                           [&>div]:shrink-0 "
+						style={{
+							width: `${columnVirtualizer.getTotalSize()}px`,
+							height: "100%",
+							position: "relative",
+						}}
 					>
-						<Program
-							name="Program 1"
-							time="10:00 AM"
-							width={250}
-							height={heightProgramContainer}
-						/>
-
-						<Program
-							name="Program 1"
-							time="10:00 AM"
-							width={250}
-							height={heightProgramContainer}
-						/>
-
-						<Program
-							name="Program 1"
-							time="10:00 AM"
-							width={250}
-							height={heightProgramContainer}
-						/>
-
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 155
-						</div>
-					</div>
-					<div
-						className="flex flex-row  flex-nowrap gap-1 overflow-x-auto
-                           [&>div]:shrink-0 "
-					>
-						<div className="h-[100px] w-[250px] bg-violet-300 border-2 border-violet-700">
-							program 1
-						</div>
-						<div className="h-[100px] w-[500px]  bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
-						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
-						</div>
+						{channelsItems.map((virtual) => {
+							const ch = channelsList[virtual.index];
+							const { events } = ch;
+							return (
+								<div
+									key={ch.id}
+									className="absolute top-0"
+									style={{
+										transform: `translateY(${virtual.start}px)`,
+									}}
+								>
+									<div className="flex flex-row flex-nowrap gap-1 overflow-x-auto overflow-y-auto [&>div]:shrink-0">
+										{events.map((event) => {
+											const { name, unix_begin, unix_end } = event;
+											return (
+												<Program
+													key={event.id ?? unix_begin}
+													name={name}
+													time={`${new Date(unix_begin * 1000).toLocaleTimeString()} - ${new Date(unix_end * 1000).toLocaleTimeString()}`}
+													width={250}
+													height={heightProgramContainer}
+												/>
+											);
+										})}
+									</div>
+								</div>
+							);
+						})}
 					</div>
 				</div>
 			</div>
