@@ -1,14 +1,17 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import Channel from "@/components/ui/Channel";
 import Program from "@/components/ui/Program";
+import useScrollHeader from "@/hooks/useScrollHeader";
 import useEpgStore from "@/store/useEpgStore";
 import { getHoursHeaderFromDates } from "@/utils";
 
-const Demo = () => {
+const TimeLine = () => {
 	const timesDivRef = useRef<HTMLDivElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const channels = useEpgStore.getState();
+
+	useScrollHeader({ containerRef, timesDivRef });
 
 	const { entry, response } = channels.entry;
 	const { channels: channelsList } = response;
@@ -19,8 +22,6 @@ const Demo = () => {
 
 	const visibleHours = getVisibleHours();
 
-	console.log("visibleHours :;", visibleHours);
-
 	const columnVirtualizer = useVirtualizer({
 		horizontal: false,
 		count: channelsList.length,
@@ -28,37 +29,6 @@ const Demo = () => {
 		estimateSize: () => 100,
 		overscan: 5,
 	});
-
-	useEffect(() => {
-		const el = containerRef.current;
-		if (!el) return;
-
-		// Set initial scroll position to 250px to match timesDivRef
-		el.scrollLeft = 0;
-
-		let raf = 0;
-		const onScroll = () => {
-			const x = el.scrollLeft;
-			if (!raf) {
-				raf = requestAnimationFrame(() => {
-					raf = 0;
-					if (timesDivRef.current) {
-						timesDivRef.current.scrollLeft = x;
-					}
-				});
-			}
-		};
-
-		if (timesDivRef.current) {
-			timesDivRef.current.style.transform = "translateX(0px)";
-		}
-
-		el.addEventListener("scroll", onScroll, { passive: true });
-		return () => {
-			el.removeEventListener("scroll", onScroll);
-			if (raf) cancelAnimationFrame(raf);
-		};
-	}, []);
 
 	const channelsItems = columnVirtualizer.getVirtualItems();
 
@@ -132,9 +102,6 @@ const Demo = () => {
 						className="flex flex-row  flex-nowrap gap-1 overflow-x-auto overflow-y-auto
                            [&>div]:shrink-0 "
 					>
-						<div className="h-[100px] w-[250px] bg-violet-300 border-2 border-violet-700">
-							program 1
-						</div>
 						<Program
 							name="Program 1"
 							time="10:00 AM"
@@ -278,4 +245,4 @@ const Demo = () => {
 		</div>
 	);
 };
-export default Demo;
+export default TimeLine;
