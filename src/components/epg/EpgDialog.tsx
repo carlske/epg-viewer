@@ -20,10 +20,13 @@ const EpgDialog = ({ open, onClose }: DialogProps) => {
 
 	return (
 		<Dialog open={open} onClose={onClose}>
-			<Suspense fallback={<div>Loading...</div>}>
-				<Epgcontent />
-			</Suspense>
+			{!data && !error && <div>Loading...</div>}
 			{error && <div>Error loading EPG data</div>}
+			{data && (
+				<Suspense fallback={<div>Loading...</div>}>
+					<Epgcontent />
+				</Suspense>
+			)}
 		</Dialog>
 	);
 };
