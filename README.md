@@ -1,6 +1,8 @@
 # EPG Viewer
 
-An interactive Electronic Program Guide (EPG) viewer built with React, designed to handle large data sets efficiently using virtualization and modern state management.
+The timeline currently renders the programs in fixed slots (Program components).
+The next step was to implement proportional sizing based on unix_begin/unix_end and the pxPerMinute scale, so that each program’s real duration is reflected in its width on the timeline.
+The architecture is already prepared to support this extension without major changes.
 
 ---
 
