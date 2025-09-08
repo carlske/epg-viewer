@@ -6,7 +6,7 @@ import Channel from "@/components/ui/Channel";
 import Program from "@/components/ui/Program";
 import useEpgStore from "@/store/useEpgStore";
 import { getHoursHeaderFromDates } from "@/utils";
-import { HEIGHT_PROGRAM_CONTAINER } from "@/utils/constants";
+import { HEIGHT_PROGRAM_CONTAINER, SIZE_BLOCK } from "@/utils/constants";
 import TimeLineFilter from "./TimeLineFilter";
 
 const TimeLine = () => {
@@ -15,7 +15,7 @@ const TimeLine = () => {
 	const channels = useEpgStore.getState();
 
 	const pxPerMinute = 6;
-	const slotWidth = 30 * pxPerMinute;
+	const slotWidth = 15 * pxPerMinute;
 
 	const { entry, response } = channels.entry;
 	const { channels: channelsList } = response;
@@ -43,7 +43,14 @@ const TimeLine = () => {
 	const channelsItems = columnVirtualizer.getVirtualItems();
 
 	const MAX_SCROLL_WIDTH = 5000;
-	const totalSize = Math.min(visibleHours.length * 250, MAX_SCROLL_WIDTH);
+	const totalSize = Math.min(
+		visibleHours.length * SIZE_BLOCK,
+		MAX_SCROLL_WIDTH,
+	);
+	const totalSizeChannels = Math.min(
+		channelsList.length * SIZE_BLOCK,
+		MAX_SCROLL_WIDTH,
+	);
 
 	useEffect(() => {
 		const el = containerRef.current;
@@ -124,12 +131,12 @@ const TimeLine = () => {
 			<main
 				ref={containerRef}
 				className="flex flex-row w-full overflow-x-auto hide-scroll overflow-y-auto bg-black/10 scrollbar-hide"
-				style={{ height: "90dvh" }}
-				aria-label="Contenido de la guía de programas"
+				style={{ height: "90vh", minHeight: "400px" }}
+				aria-label="EPG timeline Main content"
 			>
 				<div
 					style={{
-						width: `${totalSize}px`,
+						width: `${totalSizeChannels}px`,
 						height: "100%",
 						position: "relative",
 					}}
@@ -138,7 +145,7 @@ const TimeLine = () => {
 
 				<aside
 					className="flex flex-col sticky z-10 bg-black left-0 h-full  [&>div]:w-[250px] [&>div]:h-[100px] [&>div]:shrink-0"
-					aria-label="Lista de canales"
+					aria-label="List of channels"
 				>
 					{channelsItems.map((virtual) => {
 						const ch = channelsList[virtual.index];
@@ -163,7 +170,7 @@ const TimeLine = () => {
 
 				<section
 					className="h-[100px] ml-[250px] border-2"
-					aria-label="Programas por canal"
+					aria-label="Programs by channel"
 				>
 					<div
 						style={{
@@ -191,9 +198,9 @@ const TimeLine = () => {
 													key={`${index}-${ch.id}`}
 													name={name}
 													time={`${new Date(unix_begin * 1000).toLocaleTimeString()} - ${new Date(unix_end * 1000).toLocaleTimeString()}`}
-													width={250}
+													width={SIZE_BLOCK}
 													height={HEIGHT_PROGRAM_CONTAINER}
-													aria-label={`Programa ${name} de ${new Date(unix_begin * 1000).toLocaleTimeString()} a ${new Date(unix_end * 1000).toLocaleTimeString()}`}
+													aria-label={`Programs ${name} from ${new Date(unix_begin * 1000).toLocaleTimeString()} to ${new Date(unix_end * 1000).toLocaleTimeString()}`}
 												/>
 											);
 										})}
