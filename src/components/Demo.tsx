@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Channel from "./ui/Channel";
 import Program from "./ui/Program";
 
@@ -6,11 +6,33 @@ const Demo = () => {
 	const timesDivRef = useRef<HTMLDivElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	const handleContainerScroll = () => {
-		if (timesDivRef.current && containerRef.current) {
-			timesDivRef.current.scrollLeft = containerRef.current.scrollLeft;
+	useEffect(() => {
+		const el = containerRef.current;
+		if (!el) return;
+
+		let raf = 0;
+		const onScroll = () => {
+			const x = el.scrollLeft;
+			if (!raf) {
+				raf = requestAnimationFrame(() => {
+					raf = 0;
+					if (timesDivRef.current) {
+						timesDivRef.current.style.transform = `translateX(${-x}px)`;
+					}
+				});
+			}
+		};
+
+		if (timesDivRef.current) {
+			timesDivRef.current.style.transform = "translateX(0px)";
 		}
-	};
+
+		el.addEventListener("scroll", onScroll, { passive: true });
+		return () => {
+			el.removeEventListener("scroll", onScroll);
+			if (raf) cancelAnimationFrame(raf);
+		};
+	}, []);
 
 	const heightProgramContainer = 100;
 
@@ -26,77 +48,77 @@ const Demo = () => {
 
 				<div
 					ref={timesDivRef}
-					className="flex fixed flex-row  left-[250px] top-0 bg-black
+					className="flex  flex-row  left-[250px] top-0 bg-black
 						[&>div]:w-[250px] [&>div]:h-[50px] overflow-hidden [&>div]:shrink-0 gap-1"
 				>
+					<div className="h-full flex justify-center items-center text-epg-baby-powder">
+						<span>111</span>
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
 					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
 						<span>1444</span>
-					</div>{" "}
+					</div>
 					<div className="h-full flex justify-center items-center text-epg-baby-powder">
-						<span>1444</span>
-					</div>{" "}
-					<div className="h-full flex justify-center items-center text-epg-baby-powder">
-						<span>1444</span>
+						<span>1444444</span>
 					</div>
 				</div>
 			</div>
@@ -104,10 +126,9 @@ const Demo = () => {
 			{/* Content */}
 			<div
 				ref={containerRef}
-				className="flex flex-row w-full mt-[50px] overflow-x-auto bg-black/10 scrollbar-hide"
-				onScroll={handleContainerScroll}
+				className="flex flex-row w-full overflow-x-auto hide-scroll overflow-y-auto bg-black/10 scrollbar-hide"
+				style={{ height: "50vh" }}
 			>
-				{/* Primera columna fija */}
 				<div className="flex flex-col sticky  bg-black left-0 h-full gap-1 [&>div]:w-[250px]  [&>div]:h-[100px] [&>div]:shrink-0">
 					<Channel
 						alt=""
@@ -200,7 +221,7 @@ const Demo = () => {
 				{/* Program Items */}
 				<div className="h-[100px] border-2">
 					<div
-						className="flex flex-row  flex-nowrap gap-1 overflow-x-auto
+						className="flex flex-row  flex-nowrap gap-1 overflow-x-auto overflow-y-auto
                            [&>div]:shrink-0 "
 					>
 						<div className="h-[100px] w-[250px] bg-violet-300 border-2 border-violet-700">
@@ -261,10 +282,8 @@ const Demo = () => {
 							program 1
 						</div>
 						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
-							program 1
+							program 155
 						</div>
-
-						{/* ... */}
 					</div>
 					<div
 						className="flex flex-row  flex-nowrap gap-1 overflow-x-auto
@@ -345,8 +364,6 @@ const Demo = () => {
 						<div className="h-[100px] w-[250px] bg-violet-300  border-2 border-violet-700 ">
 							program 1
 						</div>
-
-						{/* ... */}
 					</div>
 				</div>
 			</div>
