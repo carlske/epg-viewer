@@ -1,3 +1,4 @@
+import { resolve } from "node:path";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
@@ -5,6 +6,12 @@ export default defineConfig({
 		globals: true,
 		environment: "jsdom",
 		setupFiles: [],
-		include: ["tests/**/*.test.{ts,tsx}"],
+		include: ["src/test/**/*.test.{ts,tsx}"],
+	},
+	resolve: {
+		alias: {
+			"@": resolve(__dirname, "src"),
+			"@epg": resolve(__dirname, "src/components/epg"),
+		},
 	},
 });
