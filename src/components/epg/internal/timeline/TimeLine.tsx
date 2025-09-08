@@ -1,17 +1,21 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { useCallback, useRef } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
+import { Button } from "@/components/ui/Button";
 import Channel from "@/components/ui/Channel";
 import Program from "@/components/ui/Program";
-import useScrollHeader from "@/hooks/useScrollHeader";
 import useEpgStore from "@/store/useEpgStore";
 import { getHoursHeaderFromDates } from "@/utils";
+import { HEIGHT_PROGRAM_CONTAINER } from "@/utils/constants";
+import TimeLineFilter from "./TimeLineFilter";
 
 const TimeLine = () => {
 	const timesDivRef = useRef<HTMLDivElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const channels = useEpgStore.getState();
 
-	useScrollHeader({ containerRef, timesDivRef });
+	const pxPerMinute = 6;
+	const slotWidth = 30 * pxPerMinute;
 
 	const { entry, response } = channels.entry;
 	const { channels: channelsList } = response;
@@ -20,34 +24,91 @@ const TimeLine = () => {
 		return getHoursHeaderFromDates(entry.date_from, entry.date_to);
 	}, [entry.date_from, entry.date_to]);
 
-	const visibleHours = getVisibleHours();
+	const visibleHours = useMemo(() => getVisibleHours(), [getVisibleHours]);
 
 	const columnVirtualizer = useVirtualizer({
 		horizontal: false,
 		count: channelsList.length,
 		getScrollElement: () => containerRef.current,
-		estimateSize: () => 100,
+		estimateSize: () => HEIGHT_PROGRAM_CONTAINER,
 		overscan: 5,
 	});
 
+	const scrollBy = (amount: number) => {
+		if (containerRef.current) {
+			containerRef.current.scrollLeft += amount;
+		}
+	};
+
 	const channelsItems = columnVirtualizer.getVirtualItems();
 
-	const heightProgramContainer = 100;
+	const MAX_SCROLL_WIDTH = 5000;
+	const totalSize = Math.min(visibleHours.length * 250, MAX_SCROLL_WIDTH);
+
+	useEffect(() => {
+		const el = containerRef.current;
+
+		if (!el) return;
+
+		el.scrollLeft = 0;
+
+		let raf = 0;
+		const onScroll = () => {
+			const x = el.scrollLeft;
+			if (!raf) {
+				raf = requestAnimationFrame(() => {
+					raf = 0;
+					if (timesDivRef.current) {
+						timesDivRef.current.scrollLeft = x;
+					}
+				});
+			}
+		};
+
+		if (timesDivRef.current) {
+			timesDivRef.current.scrollLeft = 0;
+		}
+
+		el.addEventListener("scroll", onScroll, { passive: true });
+		return () => {
+			el.removeEventListener("scroll", onScroll);
+			if (raf) cancelAnimationFrame(raf);
+		};
+	}, []);
 
 	return (
-		<div className="bg-black overflow-hidden">
-			<div className=" top-0">
-				{/* Header */}
-				<div className="w-[250px] h-[50px] text-center text-epg-baby-powder fixed z-10 bg-primary ">
-					DIA
+		<div className="bg-black overflow-hidden" role="presentation">
+			<header className="top-0">
+				<TimeLineFilter />
+				<div className="w-[250px] h-[50px] text-center text-epg-baby-powder  flex items-center justify-center fixed z-10 bg-black">
+					<span>DIA</span>
 				</div>
-
-				{/* Time */}
-
+				<nav
+					className="text-white flex items-center fixed z-20 right-0"
+					aria-label="Controles de desplazamiento temporal"
+				>
+					<Button
+						variant="ghost"
+						size="icon"
+						className="bg-black"
+						onClick={() => scrollBy(-slotWidth * 2)}
+						aria-label="Desplazar a la izquierda"
+					>
+						<ChevronLeft aria-hidden="true" size={20} />
+					</Button>
+					<Button
+						size="icon"
+						variant="ghost"
+						className="bg-black"
+						onClick={() => scrollBy(slotWidth * 2)}
+						aria-label="Desplazar a la derecha"
+					>
+						<ChevronRight aria-hidden="true" size={20} />
+					</Button>
+				</nav>
 				<div
 					ref={timesDivRef}
-					className="flex  flex-row   top-0 bg-black
-						[&>div]:w-[250px] ml-[250px]  [&>div]:h-[50px] overflow-hidden [&>div]:shrink-0 gap-1"
+					className="flex flex-row top-0 bg-black [&>div]:w-[250px] ml-[250px] [&>div]:h-[50px] overflow-hidden [&>div]:shrink-0 gap-1"
 				>
 					{visibleHours.map((hour, index) => (
 						<div
@@ -58,29 +119,33 @@ const TimeLine = () => {
 						</div>
 					))}
 				</div>
-			</div>
+			</header>
 
-			{/* Content */}
-			<div
+			<main
 				ref={containerRef}
 				className="flex flex-row w-full overflow-x-auto hide-scroll overflow-y-auto bg-black/10 scrollbar-hide"
 				style={{ height: "90dvh" }}
+				aria-label="Contenido de la guía de programas"
 			>
 				<div
 					style={{
-						width: `${columnVirtualizer.getTotalSize()}px`,
+						width: `${totalSize}px`,
 						height: "100%",
 						position: "relative",
 					}}
+					aria-hidden="true"
 				></div>
 
-				<div className="flex flex-col sticky z-10  bg-black left-0 h-full gap-1 [&>div]:w-[250px]  [&>div]:h-[100px] [&>div]:shrink-0">
+				<aside
+					className="flex flex-col sticky z-10 bg-black left-0 h-full  [&>div]:w-[250px] [&>div]:h-[100px] [&>div]:shrink-0"
+					aria-label="Lista de canales"
+				>
 					{channelsItems.map((virtual) => {
 						const ch = channelsList[virtual.index];
 						return (
 							<div
 								key={ch.id}
-								className="absolute top-0 left-0 w-[250px] h-[100px]"
+								className="absolute border-1   border-gray-700 top-0 left-0 w-[250px] h-[100px]"
 								style={{ transform: `translateY(${virtual.start}px)` }}
 							>
 								<Channel
@@ -94,13 +159,15 @@ const TimeLine = () => {
 							</div>
 						);
 					})}
-				</div>
+				</aside>
 
-				{/* Program Items */}
-				<div className="h-[100px] ml-[250px] border-2">
+				<section
+					className="h-[100px] ml-[250px] border-2"
+					aria-label="Programas por canal"
+				>
 					<div
 						style={{
-							width: `${columnVirtualizer.getTotalSize()}px`,
+							width: `${totalSize}px`,
 							height: "100%",
 							position: "relative",
 						}}
@@ -116,16 +183,17 @@ const TimeLine = () => {
 										transform: `translateY(${virtual.start}px)`,
 									}}
 								>
-									<div className="flex flex-row flex-nowrap gap-1 overflow-x-auto overflow-y-auto [&>div]:shrink-0">
-										{events.map((event) => {
+									<div className="flex border-2 flex-row flex-nowrap gap-1 overflow-x-auto overflow-y-auto [&>div]:shrink-0">
+										{events.map((event, index) => {
 											const { name, unix_begin, unix_end } = event;
 											return (
 												<Program
-													key={event.id ?? unix_begin}
+													key={`${index}-${ch.id}`}
 													name={name}
 													time={`${new Date(unix_begin * 1000).toLocaleTimeString()} - ${new Date(unix_end * 1000).toLocaleTimeString()}`}
 													width={250}
-													height={heightProgramContainer}
+													height={HEIGHT_PROGRAM_CONTAINER}
+													aria-label={`Programa ${name} de ${new Date(unix_begin * 1000).toLocaleTimeString()} a ${new Date(unix_end * 1000).toLocaleTimeString()}`}
 												/>
 											);
 										})}
@@ -134,8 +202,8 @@ const TimeLine = () => {
 							);
 						})}
 					</div>
-				</div>
-			</div>
+				</section>
+			</main>
 		</div>
 	);
 };

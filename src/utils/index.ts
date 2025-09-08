@@ -18,6 +18,7 @@ export function getHoursHeaderFromDates(start: string, end: string): string[] {
 
 	const hours: string[] = [];
 	const current = new Date(startDate);
+	current.setHours(current.getHours() + 1);
 	while (current <= endDate) {
 		hours.push(`${current.getHours().toString().padStart(2, "0")}:00`);
 		current.setHours(current.getHours() + 1);
