@@ -1,3 +1,4 @@
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { useCallback, useEffect, useRef } from "react";
 import Channel from "@/components/ui/Channel";
 import Program from "@/components/ui/Program";
@@ -17,6 +18,16 @@ const Demo = () => {
 	}, [entry.date_from, entry.date_to]);
 
 	const visibleHours = getVisibleHours();
+
+	const columnVirtualizer = useVirtualizer({
+		horizontal: false,
+		count: channelsList.length,
+		getScrollElement: () => containerRef.current,
+		estimateSize: () => 100,
+		overscan: 5,
+	});
+
+	const channelsItems = columnVirtualizer.getVirtualItems();
 
 	useEffect(() => {
 		const el = containerRef.current;
@@ -78,19 +89,36 @@ const Demo = () => {
 			<div
 				ref={containerRef}
 				className="flex flex-row w-full overflow-x-auto hide-scroll overflow-y-auto bg-black/10 scrollbar-hide"
-				style={{ height: "50vh" }}
+				style={{ height: "90dvh" }}
 			>
+				<div
+					style={{
+						width: `${columnVirtualizer.getTotalSize()}px`,
+						height: "100%",
+						position: "relative",
+					}}
+				></div>
+
 				<div className="flex flex-col sticky  bg-black left-0 h-full gap-1 [&>div]:w-[250px]  [&>div]:h-[100px] [&>div]:shrink-0">
-					{channelsList.map((ch) => (
-						<Channel
-							key={ch.id}
-							imageLarge={ch.group.common.image_large}
-							imageMedium={ch.group.common.image_medium}
-							imageSmall={ch.group.common.image_small}
-							canalNumber={ch.name}
-							alt={ch.name}
-						/>
-					))}
+					{channelsItems.map((virtual) => {
+						const ch = channelsList[virtual.index];
+						return (
+							<div
+								key={ch.id}
+								className="absolute top-0 left-0 w-[250px] h-[100px]"
+								style={{ transform: `translateY(${virtual.start}px)` }}
+							>
+								<Channel
+									key={ch.id}
+									imageLarge={ch.group.common.image_large}
+									imageMedium={ch.group.common.image_medium}
+									imageSmall={ch.group.common.image_small}
+									canalNumber={ch.name}
+									alt={ch.name}
+								/>
+							</div>
+						);
+					})}
 				</div>
 
 				{/* Program Items */}
