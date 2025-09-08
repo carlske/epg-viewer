@@ -99,3 +99,20 @@ src/
 
 - `biome.json` — Biome configuration for linting and formatting  
 - `vite.config.ts` — Vite configuration file  
+
+---
+
+## Environment Variables
+
+**VITE_API_EPG_URL is required** and must be set in your `.env` file at the project root:
+
+```
+VITE_API_EPG_URL=<your_epg_api_url>
+```
+
+Replace `<your_epg_api_url>` with the actual URL of your EPG API endpoint.
+
+Example:
+```
+VITE_API_EPG_URL=https://api.example.com/epg
+```
