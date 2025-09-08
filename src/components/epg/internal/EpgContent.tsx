@@ -1,5 +1,5 @@
-import Demo from "@/components/epg/internal/timeline/Demo";
 import ProgramInfo from "./program/ProgramInfo";
+import TimeLine from "./timeline/TimeLine";
 
 const Epgcontent = () => {
 	return (
@@ -14,7 +14,7 @@ const Epgcontent = () => {
 					description="This is a detailed description of the program. It provides insights into the content and what viewers can expect."
 				/>
 			</div>
-			<Demo />
+			<TimeLine />
 		</div>
 	);
 };

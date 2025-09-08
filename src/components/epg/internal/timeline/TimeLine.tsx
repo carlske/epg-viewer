@@ -19,6 +19,8 @@ const Demo = () => {
 
 	const visibleHours = getVisibleHours();
 
+	console.log("visibleHours :;", visibleHours);
+
 	const columnVirtualizer = useVirtualizer({
 		horizontal: false,
 		count: channelsList.length,
@@ -27,11 +29,12 @@ const Demo = () => {
 		overscan: 5,
 	});
 
-	const channelsItems = columnVirtualizer.getVirtualItems();
-
 	useEffect(() => {
 		const el = containerRef.current;
 		if (!el) return;
+
+		// Set initial scroll position to 250px to match timesDivRef
+		el.scrollLeft = 0;
 
 		let raf = 0;
 		const onScroll = () => {
@@ -40,14 +43,14 @@ const Demo = () => {
 				raf = requestAnimationFrame(() => {
 					raf = 0;
 					if (timesDivRef.current) {
-						timesDivRef.current.style.transform = `translateX(${-x}px)`;
+						timesDivRef.current.scrollLeft = x;
 					}
 				});
 			}
 		};
 
 		if (timesDivRef.current) {
-			timesDivRef.current.style.transform = "translateX(250px)";
+			timesDivRef.current.style.transform = "translateX(0px)";
 		}
 
 		el.addEventListener("scroll", onScroll, { passive: true });
@@ -56,6 +59,8 @@ const Demo = () => {
 			if (raf) cancelAnimationFrame(raf);
 		};
 	}, []);
+
+	const channelsItems = columnVirtualizer.getVirtualItems();
 
 	const heightProgramContainer = 100;
 
@@ -71,13 +76,13 @@ const Demo = () => {
 
 				<div
 					ref={timesDivRef}
-					className="flex  flex-row  left-[250px] top-0 bg-black
-						[&>div]:w-[250px] [&>div]:h-[50px] overflow-hidden [&>div]:shrink-0 gap-1"
+					className="flex  flex-row   top-0 bg-black
+						[&>div]:w-[250px] ml-[250px]  [&>div]:h-[50px] overflow-hidden [&>div]:shrink-0 gap-1"
 				>
-					{visibleHours.map((hour) => (
+					{visibleHours.map((hour, index) => (
 						<div
-							key={hour}
-							className="h-full flex justify-center items-center text-epg-baby-powder"
+							key={`${index}-${hour}`}
+							className="h-full flex flex-col justify-center items-center text-epg-baby-powder"
 						>
 							<span>{hour}</span>
 						</div>
@@ -122,7 +127,7 @@ const Demo = () => {
 				</div>
 
 				{/* Program Items */}
-				<div className="h-[100px] border-2">
+				<div className="h-[100px] ml-[250px] border-2">
 					<div
 						className="flex flex-row  flex-nowrap gap-1 overflow-x-auto overflow-y-auto
                            [&>div]:shrink-0 "
