@@ -115,7 +115,8 @@ const TimeLine = () => {
 				</nav>
 				<div
 					ref={timesDivRef}
-					className="flex flex-row top-0 bg-black [&>div]:w-[250px] ml-[250px] [&>div]:h-[50px] overflow-hidden [&>div]:shrink-0 gap-1"
+					className="flex flex-row  top-0 bg-black [&>div]:w-[250px] ml-[250px] [&>div]:h-[50px] overflow-hidden [&>div]:shrink-0 gap-1"
+					data-testid="time-header"
 				>
 					{visibleHours.map((hour, index) => (
 						<div
@@ -133,6 +134,7 @@ const TimeLine = () => {
 				className="flex flex-row w-full overflow-x-auto hide-scroll overflow-y-auto bg-black/10 scrollbar-hide"
 				style={{ height: "90vh", minHeight: "400px" }}
 				aria-label="EPG timeline Main content"
+				data-testid="epg-timeline-main-content"
 			>
 				<div
 					style={{
@@ -146,6 +148,7 @@ const TimeLine = () => {
 				<aside
 					className="flex flex-col sticky z-10 bg-black left-0 h-full  [&>div]:w-[250px] [&>div]:h-[100px] [&>div]:shrink-0"
 					aria-label="List of channels"
+					data-testid="channels-list"
 				>
 					{channelsItems.map((virtual) => {
 						const ch = channelsList[virtual.index];
@@ -171,6 +174,7 @@ const TimeLine = () => {
 				<section
 					className="h-[100px] ml-[250px] border-2"
 					aria-label="Programs by channel"
+					data-testid="programs-by-channel-section"
 				>
 					<div
 						style={{
@@ -186,6 +190,7 @@ const TimeLine = () => {
 								<div
 									key={ch.id}
 									className="absolute top-0"
+									data-testid="channel-list"
 									style={{
 										transform: `translateY(${virtual.start}px)`,
 									}}

@@ -37,8 +37,8 @@ export const Dialog = ({ open, onClose, children }: DialogProps) => {
 					variant="ghost"
 					className="absolute top-4 cursor-pointer right-1 text-epg-baby-powder hover:opacity-70"
 					onClick={onClose}
-					aria-label="Close"
-					aria-labelledby="Close Dialog"
+					aria-label="Close Dialog"
+					aria-labelledby="Close Dialog button"
 					type="button"
 				>
 					<X aria-hidden="true" size={35} />
