@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import useEpgData from "@/hooks/useEpgData";
 import useEpgStore from "@/store/useEpgStore";
 import { Dialog } from "../ui/Dialog";
