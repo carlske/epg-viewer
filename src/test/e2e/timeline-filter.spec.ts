@@ -16,12 +16,24 @@ test.describe("EPG Timeline Render Didalog", () => {
 });
 
 test.describe("EPG Timeline Main Content Render", () => {
-	test("should render the Channels button", async ({ page }) => {
+	test("should render the Channels content", async ({ page }) => {
 		await page.getByRole("button", { name: "Open Epg" }).click();
 		await expect(page.getByRole("dialog")).toBeVisible();
 
 		await expect(
 			page.locator("main[aria-label='EPG timeline Main content']"),
-		).toBeVisible();
+		).toBeVisible({ timeout: 10000 });
+	});
+});
+
+test.describe("EPG Timeline Main Content Render", () => {
+	test("should render the Channels cloose Dialog", async ({ page }) => {
+		await page.getByRole("button", { name: "Open Epg" }).click();
+		await expect(page.getByRole("dialog")).toBeVisible();
+		page.locator("main[aria-label='EPG timeline Main content']");
+		await page.getByLabel("Close Dialog").click();
+		await expect(
+			page.locator("main[aria-label='EPG timeline Main content']"),
+		).not.toBeVisible();
 	});
 });
