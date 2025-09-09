@@ -34,6 +34,29 @@ pnpm preview
 
 ---
 
+## Why These Technologies?
+
+
+- **React + TypeScript**: Provides a robust foundation for building a modular, component-based EPG. TypeScript ensures type safety across API responses (e.g., unix_begin / unix_end) and prevents runtime errors when mapping schedules.
+
+- **Vite**: Enables instant startup and fast HMR, which is critical for iterating quickly on UI adjustments and timeline rendering under tight deadlines.
+
+- **Tailwind CSS**: A utility-first CSS framework that accelerates the creation of a responsive grid layout with sticky headers/sidebars, perfectly fitting the “TV guide” look without writing large amounts of custom CSS.
+
+- **TanStack Virtual**: Essential for performance when rendering potentially hundreds of channels and thousands of programs. Virtualization ensures smooth scrolling in the EPG timeline without overloading the DOM.
+
+- **TanStack Query**: Manages API calls, caching, and background refreshes of the EPG data, ensuring the timeline is always up to date while keeping data-fetching logic clean and declarative.
+
+- **Zustand**: Simple and scalable global state management that complements React Query. Used for UI state like scroll position, filters, and “now” marker without adding boilerplate.
+
+- **Biome**: Modern linting/formatting ensures a consistent codebase, especially valuable in a test project where clarity and maintainability are evaluated.
+
+- **Vitest**: Provides unit tests for core logic (e.g., time-to-pixels conversion, adapters), guaranteeing correctness of the most business-critical parts.
+
+- **Playwright**: Validates end-to-end behavior like horizontal/vertical scroll, sticky headers, and modal interactions across browsers, ensuring the EPG behaves as expected for the user.
+
+---
+
 ## Tech Stack
 
 - **React** + **TypeScript** — Core UI framework  
