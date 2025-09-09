@@ -6,6 +6,7 @@ const EpgcontentSkeleton = () => {
 			className="grid grid-cols-1 gap-4 h-screen"
 			style={{ gridTemplateRows: "40% 60%" }}
 			aria-label="EPG main content skeleton"
+			data-testid="loading"
 		>
 			<section
 				className="flex flex-col gap-2 items-start justify-center"

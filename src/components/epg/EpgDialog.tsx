@@ -22,12 +22,8 @@ const EpgDialog = ({ open, onClose }: DialogProps) => {
 	return (
 		<Dialog open={open} onClose={onClose}>
 			{!data && !error && <EpgcontentSkeleton />}
-			{error && <div>Error loading EPG data</div>}
-			{data && (
-				<Suspense fallback={<div>Loading...</div>}>
-					<Epgcontent />
-				</Suspense>
-			)}
+			{error && <div data-testid="error">Error loading EPG data</div>}
+			{data && <Epgcontent />}
 		</Dialog>
 	);
 };
