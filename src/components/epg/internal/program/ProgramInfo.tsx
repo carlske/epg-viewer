@@ -5,7 +5,6 @@ const ProgramInfo = () => {
 	const programTitleId = useId();
 
 	const selectedProgram = useEpgStore((state) => state.selectedProgram);
-	console.log("Selected Program:", selectedProgram);
 
 	return (
 		<section
