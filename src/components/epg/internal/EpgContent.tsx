@@ -9,9 +9,7 @@ const Epgcontent = () => {
 			aria-label="EPG main content"
 		>
 			<ProgramInfo />
-			<section aria-label="EPG timeline">
-				<TimeLine />
-			</section>
+			<TimeLine />
 		</article>
 	);
 };

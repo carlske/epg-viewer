@@ -1,4 +1,5 @@
 import useEpgStore from "@/store/useEpgStore";
+import { memo } from "react";
 
 interface ProgramProps {
 	id?: string;
@@ -9,36 +10,31 @@ interface ProgramProps {
 	channelId?: string;
 }
 
-const Program = ({
-	id,
-	name,
-	time,
-	width,
-	height,
-	channelId,
-}: ProgramProps) => {
-	const setSelectedProgram = useEpgStore((state) => state.setSelectedProgram);
+const Program = memo<ProgramProps>(
+	({ id, name, time, width, height, channelId }: ProgramProps) => {
+		const setSelectedProgram = useEpgStore((state) => state.setSelectedProgram);
 
-	const handleMouseEnter = () => {
-		setSelectedProgram({
-			id: id ?? "",
-			name,
-			time,
-			channelId: channelId ?? "",
-		});
-	};
+		const handleMouseEnter = () => {
+			setSelectedProgram({
+				id: id ?? "",
+				name,
+				time,
+				channelId: channelId ?? "",
+			});
+		};
 
-	return (
-		<li
-			data-testid="program-item"
-			onMouseEnter={handleMouseEnter}
-			className="bg-gray-600 text-epg-baby-powder cursor-pointer hover:bg-primary  p-4 flex flex-col justify-center"
-			style={{ width, height }}
-		>
-			<span>{name}</span>
-			<span>{time}</span>
-		</li>
-	);
-};
+		return (
+			<li
+				data-testid="program-item"
+				onMouseEnter={handleMouseEnter}
+				className="bg-gray-600 text-epg-baby-powder cursor-pointer hover:bg-primary  p-4 flex flex-col justify-center"
+				style={{ width, height }}
+			>
+				<span>{name}</span>
+				<span>{time}</span>
+			</li>
+		);
+	},
+);
 
 export default Program;
