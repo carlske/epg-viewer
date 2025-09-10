@@ -1,6 +1,6 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Button } from "@/components/ui/Button";
 import Channel from "@/components/ui/Channel";
 import Program from "@/components/ui/Program";
@@ -8,23 +8,23 @@ import useEpgStore from "@/store/useEpgStore";
 import { getHoursHeaderFromDates } from "@/utils";
 import { HEIGHT_PROGRAM_CONTAINER, SIZE_BLOCK } from "@/utils/constants";
 import TimeLineFilter from "./TimeLineFilter";
+import TimeLineHours from "./TimeLineHours";
 
 const TimeLine = () => {
 	const timesDivRef = useRef<HTMLDivElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
+
 	const channels = useEpgStore.getState();
-
-	const pxPerMinute = 6;
-	const slotWidth = 15 * pxPerMinute;
-
 	const { entry, response } = channels.entry;
 	const { channels: channelsList } = response;
 
-	const getVisibleHours = useCallback(() => {
+	const pxPerMinute = 6;
+	const slotWidth = 15 * pxPerMinute;
+	const MAX_SCROLL_WIDTH = 5000;
+
+	const visibleHours = useMemo(() => {
 		return getHoursHeaderFromDates(entry.date_from, entry.date_to);
 	}, [entry.date_from, entry.date_to]);
-
-	const visibleHours = useMemo(() => getVisibleHours(), [getVisibleHours]);
 
 	const columnVirtualizer = useVirtualizer({
 		horizontal: false,
@@ -33,6 +33,7 @@ const TimeLine = () => {
 		estimateSize: () => HEIGHT_PROGRAM_CONTAINER,
 		overscan: 5,
 	});
+	const channelsItems = columnVirtualizer.getVirtualItems();
 
 	const scrollBy = (amount: number) => {
 		if (containerRef.current) {
@@ -40,9 +41,6 @@ const TimeLine = () => {
 		}
 	};
 
-	const channelsItems = columnVirtualizer.getVirtualItems();
-
-	const MAX_SCROLL_WIDTH = 5000;
 	const totalSize = Math.min(
 		visibleHours.length * SIZE_BLOCK,
 		MAX_SCROLL_WIDTH,
@@ -54,11 +52,8 @@ const TimeLine = () => {
 
 	useEffect(() => {
 		const el = containerRef.current;
-
 		if (!el) return;
-
 		el.scrollLeft = 0;
-
 		let raf = 0;
 		const onScroll = () => {
 			const x = el.scrollLeft;
@@ -71,11 +66,9 @@ const TimeLine = () => {
 				});
 			}
 		};
-
 		if (timesDivRef.current) {
 			timesDivRef.current.scrollLeft = 0;
 		}
-
 		el.addEventListener("scroll", onScroll, { passive: true });
 		return () => {
 			el.removeEventListener("scroll", onScroll);
@@ -84,14 +77,18 @@ const TimeLine = () => {
 	}, []);
 
 	return (
-		<div className="bg-black overflow-hidden" role="presentation">
+		<div
+			aria-label="EPG timeline"
+			className="bg-black overflow-hidden"
+			role="presentation"
+		>
 			<header className="top-0">
 				<TimeLineFilter />
 				<div className="w-[250px] h-[50px] text-center text-epg-baby-powder  flex items-center justify-center fixed z-10 bg-black">
 					<span>DIA</span>
 				</div>
 				<nav
-					className="text-white flex items-center fixed z-20 right-0"
+					className=" text-white flex items-center fixed z-20 right-0"
 					aria-label="Controles de desplazamiento temporal"
 				>
 					<Button
@@ -113,20 +110,9 @@ const TimeLine = () => {
 						<ChevronRight aria-hidden="true" size={20} />
 					</Button>
 				</nav>
-				<div
-					ref={timesDivRef}
-					className="flex flex-row  top-0 bg-black [&>div]:w-[250px] ml-[250px] [&>div]:h-[50px] overflow-hidden [&>div]:shrink-0 gap-1"
-					data-testid="time-header"
-				>
-					{visibleHours.map((hour, index) => (
-						<div
-							key={`${index}-${hour}`}
-							className="h-full flex flex-col justify-center items-center text-epg-baby-powder"
-						>
-							<span>{hour}</span>
-						</div>
-					))}
-				</div>
+
+				{/* Hours Header */}
+				<TimeLineHours ref={timesDivRef} visibleHours={visibleHours} />
 			</header>
 
 			<main
@@ -195,7 +181,7 @@ const TimeLine = () => {
 										transform: `translateY(${virtual.start}px)`,
 									}}
 								>
-									<div className="flex border-2 flex-row flex-nowrap gap-1 overflow-x-auto overflow-y-auto [&>div]:shrink-0">
+									<ul className="flex border-2 flex-row flex-nowrap gap-1 overflow-x-auto overflow-y-auto [&>div]:shrink-0">
 										{events.map((event, index) => {
 											const { name, unix_begin, unix_end } = event;
 											return (
@@ -209,7 +195,7 @@ const TimeLine = () => {
 												/>
 											);
 										})}
-									</div>
+									</ul>
 								</div>
 							);
 						})}

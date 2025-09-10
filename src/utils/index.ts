@@ -1,20 +1,17 @@
+function parseEpgDate(dateStr: string): Date {
+	return new Date(
+		Number(dateStr.substring(0, 4)),
+		Number(dateStr.substring(4, 6)) - 1,
+		Number(dateStr.substring(6, 8)),
+		Number(dateStr.substring(8, 10)),
+		Number(dateStr.substring(10, 12)),
+		Number(dateStr.substring(12, 14)),
+	);
+}
+
 export function getHoursHeaderFromDates(start: string, end: string): string[] {
-	const startDate = new Date(
-		Number(start.substring(0, 4)),
-		Number(start.substring(4, 6)) - 1,
-		Number(start.substring(6, 8)),
-		Number(start.substring(8, 10)),
-		Number(start.substring(10, 12)),
-		Number(start.substring(12, 14)),
-	);
-	const endDate = new Date(
-		Number(end.substring(0, 4)),
-		Number(end.substring(4, 6)) - 1,
-		Number(end.substring(6, 8)),
-		Number(end.substring(8, 10)),
-		Number(end.substring(10, 12)),
-		Number(end.substring(12, 14)),
-	);
+	const startDate = parseEpgDate(start);
+	const endDate = parseEpgDate(end);
 
 	const hours: string[] = [];
 	const current = new Date(startDate);

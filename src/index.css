@@ -1,6 +1,7 @@
 /** biome-ignore-all lint/suspicious/noUnknownAtRules: <IGNORE> */
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "tailwindcss-animated";
 
 @font-face {
 	font-family: "Roboto";
@@ -55,4 +56,8 @@ body {
 	.hide-scroll::-webkit-scrollbar {
 		display: none;
 	}
+}
+
+.channel-details-animation {
+	@apply animate-fade-right animate-once animate-duration-500 animate-ease-out;
 }
