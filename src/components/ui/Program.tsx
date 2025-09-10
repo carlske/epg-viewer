@@ -1,5 +1,5 @@
-import useEpgStore from "@/store/useEpgStore";
 import { memo } from "react";
+import useEpgStore from "@/store/useEpgStore";
 
 interface ProgramProps {
 	id?: string;

@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
-import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import TimeLineHours from "../../../components/epg/internal/timeline/TimeLineHours";
 
 const mockHours = ["3:00", "4:00", "5:00"];

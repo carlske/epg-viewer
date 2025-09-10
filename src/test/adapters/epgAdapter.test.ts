@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { parseEpgEntry } from "../../adapters/epgAdapter";
 import mockApiResponse from "../mocks/mockApiResponse.json";
 

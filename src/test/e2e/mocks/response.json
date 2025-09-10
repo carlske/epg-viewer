@@ -1,0 +1,39 @@
+{
+	"entry": {
+		"date_from": "20250909",
+		"date_to": "20250910",
+		"quantity": "10"
+	},
+	"response": {
+		"channels": [
+			{
+				"id": "1",
+				"number": "101",
+				"name": "Channel 1",
+				"group": {
+					"common": {
+						"image_large": "large.jpg",
+						"image_medium": "medium.jpg",
+						"image_small": "small.jpg"
+					}
+				},
+				"events": [
+					{
+						"channel_id": "1",
+						"id": "ev1",
+						"name": "Program 1",
+						"description": "Desc 1",
+						"date_begin": "20250909T020000",
+						"date_end": "20250909T030000",
+						"unix_begin": 1694224800,
+						"unix_end": 1694228400,
+						"duration": "60",
+						"image_base_horizontal": "h.jpg",
+						"image_base_vertical": "v.jpg",
+						"image_base_square": "s.jpg"
+					}
+				]
+			}
+		]
+	}
+}
