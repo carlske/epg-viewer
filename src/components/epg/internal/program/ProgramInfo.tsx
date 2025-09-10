@@ -1,28 +1,29 @@
 import { useId } from "react";
+import useEpgStore from "@/store/useEpgStore";
 
-type ProgramInfoProps = {
-	title?: string;
-	description?: string;
-	time?: string;
-};
-
-const ProgramInfo = ({
-	title = "Unknown Program",
-	description = "No description available",
-	time = "Unknown time",
-}: ProgramInfoProps) => {
+const ProgramInfo = () => {
 	const programTitleId = useId();
+
+	const selectedProgram = useEpgStore((state) => state.selectedProgram);
+	console.log("Selected Program:", selectedProgram);
 
 	return (
 		<section
 			aria-label="Program information"
-			className="justify-start mt-6 p-2 flex flex-col text-epg-baby-powder gap-3 w-[95%] sm:w-[90%] md:w-[80%] lg:w-[60%] xl:w-[50%]"
+			className="justify-start mt-6 p-4 flex flex-col text-epg-baby-powder gap-3 w-[95%] sm:w-[90%] md:w-[80%] lg:w-[60%] xl:w-[50%]"
 		>
-			<h2 className="title" id={programTitleId}>
-				{title}
+			<h2 className="channel-details-animation  title" id={programTitleId}>
+				{selectedProgram?.name || "Unknown Program"}
 			</h2>
-			<span aria-describedby={programTitleId}>{time}</span>
-			<p className="text-balance leading-relaxed">{description}</p>
+			<span
+				className="channel-details-animation "
+				aria-describedby={programTitleId}
+			>
+				{selectedProgram?.time || "Unknown time"}
+			</span>
+			<p className="channel-details-animation  text-balance leading-relaxed">
+				{selectedProgram?.channelId || "No description available"}
+			</p>
 		</section>
 	);
 };

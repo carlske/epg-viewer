@@ -1,6 +1,6 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Button } from "@/components/ui/Button";
 import Channel from "@/components/ui/Channel";
 import Program from "@/components/ui/Program";
@@ -13,19 +13,18 @@ import TimeLineHours from "./TimeLineHours";
 const TimeLine = () => {
 	const timesDivRef = useRef<HTMLDivElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
+
 	const channels = useEpgStore.getState();
-
-	const pxPerMinute = 6;
-	const slotWidth = 15 * pxPerMinute;
-
 	const { entry, response } = channels.entry;
 	const { channels: channelsList } = response;
 
-	const getVisibleHours = useCallback(() => {
+	const pxPerMinute = 6;
+	const slotWidth = 15 * pxPerMinute;
+	const MAX_SCROLL_WIDTH = 5000;
+
+	const visibleHours = useMemo(() => {
 		return getHoursHeaderFromDates(entry.date_from, entry.date_to);
 	}, [entry.date_from, entry.date_to]);
-
-	const visibleHours = getVisibleHours();
 
 	const columnVirtualizer = useVirtualizer({
 		horizontal: false,
@@ -34,6 +33,7 @@ const TimeLine = () => {
 		estimateSize: () => HEIGHT_PROGRAM_CONTAINER,
 		overscan: 5,
 	});
+	const channelsItems = columnVirtualizer.getVirtualItems();
 
 	const scrollBy = (amount: number) => {
 		if (containerRef.current) {
@@ -41,9 +41,6 @@ const TimeLine = () => {
 		}
 	};
 
-	const channelsItems = columnVirtualizer.getVirtualItems();
-
-	const MAX_SCROLL_WIDTH = 5000;
 	const totalSize = Math.min(
 		visibleHours.length * SIZE_BLOCK,
 		MAX_SCROLL_WIDTH,
@@ -55,11 +52,8 @@ const TimeLine = () => {
 
 	useEffect(() => {
 		const el = containerRef.current;
-
 		if (!el) return;
-
 		el.scrollLeft = 0;
-
 		let raf = 0;
 		const onScroll = () => {
 			const x = el.scrollLeft;
@@ -72,11 +66,9 @@ const TimeLine = () => {
 				});
 			}
 		};
-
 		if (timesDivRef.current) {
 			timesDivRef.current.scrollLeft = 0;
 		}
-
 		el.addEventListener("scroll", onScroll, { passive: true });
 		return () => {
 			el.removeEventListener("scroll", onScroll);
@@ -96,7 +88,7 @@ const TimeLine = () => {
 					<span>DIA</span>
 				</div>
 				<nav
-					className="text-white flex items-center fixed z-20 right-0"
+					className=" text-white flex items-center fixed z-20 right-0"
 					aria-label="Controles de desplazamiento temporal"
 				>
 					<Button
@@ -189,7 +181,7 @@ const TimeLine = () => {
 										transform: `translateY(${virtual.start}px)`,
 									}}
 								>
-									<div className="flex border-2 flex-row flex-nowrap gap-1 overflow-x-auto overflow-y-auto [&>div]:shrink-0">
+									<ul className="flex border-2 flex-row flex-nowrap gap-1 overflow-x-auto overflow-y-auto [&>div]:shrink-0">
 										{events.map((event, index) => {
 											const { name, unix_begin, unix_end } = event;
 											return (
@@ -203,7 +195,7 @@ const TimeLine = () => {
 												/>
 											);
 										})}
-									</div>
+									</ul>
 								</div>
 							);
 						})}
