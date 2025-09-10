@@ -8,6 +8,7 @@ import useEpgStore from "@/store/useEpgStore";
 import { getHoursHeaderFromDates } from "@/utils";
 import { HEIGHT_PROGRAM_CONTAINER, SIZE_BLOCK } from "@/utils/constants";
 import TimeLineFilter from "./TimeLineFilter";
+import TimeLineHours from "./TimeLineHours";
 
 const TimeLine = () => {
 	const timesDivRef = useRef<HTMLDivElement>(null);
@@ -24,7 +25,7 @@ const TimeLine = () => {
 		return getHoursHeaderFromDates(entry.date_from, entry.date_to);
 	}, [entry.date_from, entry.date_to]);
 
-	const visibleHours = useMemo(() => getVisibleHours(), [getVisibleHours]);
+	const visibleHours = getVisibleHours();
 
 	const columnVirtualizer = useVirtualizer({
 		horizontal: false,
@@ -84,7 +85,11 @@ const TimeLine = () => {
 	}, []);
 
 	return (
-		<div className="bg-black overflow-hidden" role="presentation">
+		<div
+			aria-label="EPG timeline"
+			className="bg-black overflow-hidden"
+			role="presentation"
+		>
 			<header className="top-0">
 				<TimeLineFilter />
 				<div className="w-[250px] h-[50px] text-center text-epg-baby-powder  flex items-center justify-center fixed z-10 bg-black">
@@ -113,20 +118,9 @@ const TimeLine = () => {
 						<ChevronRight aria-hidden="true" size={20} />
 					</Button>
 				</nav>
-				<div
-					ref={timesDivRef}
-					className="flex flex-row  top-0 bg-black [&>div]:w-[250px] ml-[250px] [&>div]:h-[50px] overflow-hidden [&>div]:shrink-0 gap-1"
-					data-testid="time-header"
-				>
-					{visibleHours.map((hour, index) => (
-						<div
-							key={`${index}-${hour}`}
-							className="h-full flex flex-col justify-center items-center text-epg-baby-powder"
-						>
-							<span>{hour}</span>
-						</div>
-					))}
-				</div>
+
+				{/* Hours Header */}
+				<TimeLineHours ref={timesDivRef} visibleHours={visibleHours} />
 			</header>
 
 			<main
