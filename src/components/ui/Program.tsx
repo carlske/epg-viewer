@@ -25,9 +25,9 @@ const Program = memo<ProgramProps>(
 
 		return (
 			<li
-				data-testid="program-item"
+				data-testid={`program-item-${id}`}
 				onMouseEnter={handleMouseEnter}
-				className="bg-gray-600 text-epg-baby-powder cursor-pointer hover:bg-primary  p-4 flex flex-col justify-center"
+				className="bg-epg-eerie-black/70 text-epg-baby-powder cursor-pointer hover:bg-primary  p-4 flex flex-col justify-center"
 				style={{ width, height }}
 			>
 				<span>{name}</span>
