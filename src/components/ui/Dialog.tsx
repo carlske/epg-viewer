@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Button } from "./Button";
 
 type DialogProps = {
@@ -10,18 +10,6 @@ type DialogProps = {
 
 export const Dialog = ({ open, onClose, children }: DialogProps) => {
 	const dialogRef = useRef<HTMLDivElement>(null);
-
-	useLayoutEffect(() => {
-		const originalOverflow = document.body.style.overflow;
-		if (open) {
-			document.body.style.overflow = "hidden";
-		} else {
-			document.body.style.overflow = originalOverflow;
-		}
-		return () => {
-			document.body.style.overflow = originalOverflow;
-		};
-	}, [open]);
 
 	useEffect(() => {
 		if (open) {
@@ -37,15 +25,14 @@ export const Dialog = ({ open, onClose, children }: DialogProps) => {
 
 	return (
 		<div
-			className={`animate-fade-up animate-duration-300 animate-ease-out fixed inset-0 z-50 flex items-center justify-center`}
+			className="fixed inset-0 z-50 flex items-center justify-center "
 			role="dialog"
 			aria-modal="true"
-			aria-label="EPG Premium Dialog"
 			tabIndex={-1}
 			ref={dialogRef}
 			onKeyDown={handleBackdropKeyDown}
 		>
-			<div className="bg-black/60 h-screen w-screen relative">
+			<div className="bg-black/60 h-screen w-screen relative h">
 				<Button
 					variant="ghost"
 					className="absolute top-4 cursor-pointer right-1 text-epg-baby-powder hover:opacity-70"
