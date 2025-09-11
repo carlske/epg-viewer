@@ -42,10 +42,6 @@ body {
 	--color-secondary-foreground: var(--color-epg-baby-powder);
 }
 
-.channel-details-animation {
-	@apply animate-fade-right animate-once animate-duration-500 animate-ease-out;
-}
-
 @utility title {
 	font-weight: 700;
 	font-size: 2.5rem;
@@ -62,30 +58,6 @@ body {
 	}
 }
 
-@layer baackgrounds {
-	.default-bg-header {
-		background-image: linear-gradient(
-			360deg,
-			rgba(0, 0, 0, 0.9) 0.000%,
-			rgba(0, 0, 0, 0.8965) 8.500%,
-			rgba(0, 0, 0, 0.8861) 17.00%,
-			rgba(0, 0, 0, 0.8688) 25.50%,
-			rgba(0, 0, 0, 0.8444) 34.00%,
-			rgba(0, 0, 0, 0.8132) 42.50%,
-			rgba(0, 0, 0, 0.775) 51.00%,
-			rgba(0, 0, 0, 0.7368) 59.50%,
-			rgba(0, 0, 0, 0.7056) 68.00%,
-			rgba(0, 0, 0, 0.6813) 76.50%,
-			rgba(0, 0, 0, 0.6639) 85.00%,
-			rgba(0, 0, 0, 0.6535) 93.50%,
-			rgba(0, 0, 0, 0.65) 102.0%
-		);
-	}
-
-	.main-bg {
-		background-image: url("/src/assets/image.webp");
-		background-size: cover;
-		background-position: center;
-		background-repeat: no-repeat;
-	}
+.channel-details-animation {
+	@apply animate-fade-right animate-once animate-duration-500 animate-ease-out;
 }
