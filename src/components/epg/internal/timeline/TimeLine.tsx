@@ -31,7 +31,7 @@ const TimeLine = () => {
 		count: channelsList.length,
 		getScrollElement: () => containerRef.current,
 		estimateSize: () => HEIGHT_PROGRAM_CONTAINER,
-		overscan: 10,
+		overscan: 20,
 		measureElement: (element) =>
 			element?.getBoundingClientRect().height ?? HEIGHT_PROGRAM_CONTAINER,
 	});
@@ -117,7 +117,7 @@ const TimeLine = () => {
 			<main
 				ref={containerRef}
 				className="flex flex-row w-full overflow-x-auto hide-scroll overflow-y-auto bg-black/10 scrollbar-hide"
-				style={{ height: "70vh", minHeight: "400px" }}
+				style={{ height: "60vh", minHeight: "400px" }}
 				aria-label="EPG timeline Main content"
 				data-testid="epg-timeline-main-content"
 			>
