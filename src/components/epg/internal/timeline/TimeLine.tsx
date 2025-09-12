@@ -181,7 +181,7 @@ const TimeLine = () => {
 										transform: `translateY(${virtual.start}px)`,
 									}}
 								>
-									<ul className="flex border-2 flex-row flex-nowrap gap-1 overflow-x-auto overflow-y-auto [&>div]:shrink-0">
+									<ul className="flex lex-row flex-nowrap gap-1 overflow-x-auto overflow-y-auto [&>div]:shrink-0">
 										{events.map((event, index) => {
 											const { name, unix_begin, unix_end } = event;
 											return (
