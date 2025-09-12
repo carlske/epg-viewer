@@ -31,7 +31,9 @@ const TimeLine = () => {
 		count: channelsList.length,
 		getScrollElement: () => containerRef.current,
 		estimateSize: () => HEIGHT_PROGRAM_CONTAINER,
-		overscan: 5,
+		overscan: 10,
+		measureElement: (element) =>
+			element?.getBoundingClientRect().height ?? HEIGHT_PROGRAM_CONTAINER,
 	});
 	const channelsItems = columnVirtualizer.getVirtualItems();
 
@@ -45,10 +47,7 @@ const TimeLine = () => {
 		visibleHours.length * SIZE_BLOCK,
 		MAX_SCROLL_WIDTH,
 	);
-	const totalSizeChannels = Math.min(
-		channelsList.length * SIZE_BLOCK,
-		MAX_SCROLL_WIDTH,
-	);
+	const totalSizeChannels = channelsList.length * HEIGHT_PROGRAM_CONTAINER;
 
 	useEffect(() => {
 		const el = containerRef.current;
@@ -118,21 +117,24 @@ const TimeLine = () => {
 			<main
 				ref={containerRef}
 				className="flex flex-row w-full overflow-x-auto hide-scroll overflow-y-auto bg-black/10 scrollbar-hide"
-				style={{ height: "90vh", minHeight: "400px" }}
+				style={{ height: "70vh", minHeight: "400px" }}
 				aria-label="EPG timeline Main content"
 				data-testid="epg-timeline-main-content"
 			>
 				<div
 					style={{
 						width: `${totalSizeChannels}px`,
-						height: "100%",
+						height: `${channelsList.length * HEIGHT_PROGRAM_CONTAINER}px`,
 						position: "relative",
 					}}
 					aria-hidden="true"
 				></div>
 
 				<aside
-					className="flex flex-col sticky z-10 bg-black left-0 h-full  [&>div]:w-[250px] [&>div]:h-[100px] [&>div]:shrink-0"
+					className="flex flex-col sticky z-10 bg-black left-0  [&>div]:w-[250px] [&>div]:h-[100px] [&>div]:shrink-0"
+					style={{
+						height: `${channelsList.length * HEIGHT_PROGRAM_CONTAINER}px`,
+					}}
 					aria-label="List of channels"
 					data-testid="channels-list"
 				>
@@ -158,7 +160,10 @@ const TimeLine = () => {
 				</aside>
 
 				<section
-					className="h-[100px] ml-[250px] border-2"
+					className="ml-[250px] border-2"
+					style={{
+						height: `${channelsList.length * HEIGHT_PROGRAM_CONTAINER}px`,
+					}}
 					aria-label="Programs by channel"
 					data-testid="programs-by-channel-section"
 				>
@@ -181,7 +186,7 @@ const TimeLine = () => {
 										transform: `translateY(${virtual.start}px)`,
 									}}
 								>
-									<ul className="flex border-2 flex-row flex-nowrap gap-1 overflow-x-auto overflow-y-auto [&>div]:shrink-0">
+									<ul className="flex lex-row flex-nowrap gap-1 overflow-x-auto overflow-y-auto [&>div]:shrink-0">
 										{events.map((event, index) => {
 											const { name, unix_begin, unix_end } = event;
 											return (
