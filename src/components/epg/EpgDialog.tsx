@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import useEpgData from "@/hooks/useEpgData";
 import useEpgStore from "@/store/useEpgStore";
 import { Dialog } from "../ui/Dialog";
@@ -14,9 +15,9 @@ const EpgDialog = ({ open, onClose }: DialogProps) => {
 
 	const setEntry = useEpgStore((state) => state.setEntry);
 
-	if (data) {
-		setEntry(data);
-	}
+	useEffect(() => {
+		if (data) setEntry(data);
+	}, [data, setEntry]);
 
 	return (
 		<Dialog open={open} onClose={onClose}>

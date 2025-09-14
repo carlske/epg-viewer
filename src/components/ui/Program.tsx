@@ -8,10 +8,11 @@ interface ProgramProps {
 	width: number;
 	height: number;
 	channelId?: string;
+	description: string;
 }
 
 const Program = memo<ProgramProps>(
-	({ id, name, time, width, height, channelId }: ProgramProps) => {
+	({ id, name, time, width, height, channelId, description }: ProgramProps) => {
 		const setSelectedProgram = useEpgStore((state) => state.setSelectedProgram);
 
 		const handleMouseEnter = () => {
@@ -19,7 +20,8 @@ const Program = memo<ProgramProps>(
 				id: id ?? "",
 				name,
 				time,
-				channelId: channelId ?? "",
+				channelId: channelId ?? "Channel ID not available",
+				description: description ?? "No description available",
 			});
 		};
 

@@ -6,6 +6,7 @@ interface Program {
 	name: string;
 	time: string;
 	channelId: string;
+	description: string;
 }
 
 type EpgStore = {

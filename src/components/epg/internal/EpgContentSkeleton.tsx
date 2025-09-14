@@ -1,6 +1,6 @@
 import Skeleton from "@/components/ui/Skeleton";
 
-const EpgcontentSkeleton = () => {
+const EpgContentSkeleton = () => {
 	return (
 		<article
 			className="grid grid-cols-1 gap-4 h-screen"
@@ -22,4 +22,4 @@ const EpgcontentSkeleton = () => {
 		</article>
 	);
 };
-export default EpgcontentSkeleton;
+export default EpgContentSkeleton;
