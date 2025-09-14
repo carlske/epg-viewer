@@ -1,16 +1,17 @@
 import ProgramInfo from "./program/ProgramInfo";
 import TimeLine from "./timeline/TimeLine";
+import TimeLineFilter from "./timeline/TimeLineFilter";
 
-const Epgcontent = () => {
+const EpgContent = () => {
 	return (
-		<article
-			className="grid grid-cols-1 gap-4 h-screen"
-			style={{ gridTemplateRows: "40% 60%" }}
-			aria-label="EPG main content"
-		>
+		<article aria-label="EPG main content">
 			<ProgramInfo />
-			<TimeLine />
+			<div className="fixed left-0 right-0 bottom-0 w-full">
+				<TimeLineFilter />
+				<TimeLine />
+			</div>
 		</article>
 	);
 };
-export default Epgcontent;
+
+export default EpgContent;

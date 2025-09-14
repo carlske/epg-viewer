@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Image from "./Image";
 
 interface ChannelProps {
@@ -8,7 +9,7 @@ interface ChannelProps {
 	alt: string;
 }
 
-const Channel = ({ canalNumber, alt, ...props }: ChannelProps) => {
+const Channel = memo(({ canalNumber, alt, ...props }: ChannelProps) => {
 	return (
 		<div className="h-full w-full  grid grid-cols-2 items-center gap-5 justify-center bg-epg-eerie-black">
 			<div className="font-font-bold text-epg-baby-powder text-balance p-2 ">
@@ -19,5 +20,5 @@ const Channel = ({ canalNumber, alt, ...props }: ChannelProps) => {
 			</div>
 		</div>
 	);
-};
+});
 export default Channel;

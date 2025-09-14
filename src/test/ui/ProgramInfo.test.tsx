@@ -12,6 +12,7 @@ describe("ProgramInfo", () => {
 			name: "Sport Program",
 			time: "10:00 AM - 11:00 AM",
 			channelId: "Channel 5",
+			description: "A great sports event.",
 		});
 	});
 

@@ -1,4 +1,4 @@
-import type { ImgHTMLAttributes } from "react";
+import { type ImgHTMLAttributes, memo, useMemo } from "react";
 
 interface CustomImageProps
 	extends Omit<
@@ -13,37 +13,41 @@ interface CustomImageProps
 	className?: string;
 }
 
-const Image = ({
-	imageLarge,
-	imageMedium,
-	imageSmall,
-	alt,
-	className,
-	width,
-	height,
-	...rest
-}: CustomImageProps) => {
-	const srcSet = [
-		imageSmall ? `${imageSmall} 640w` : "",
-		imageMedium ? `${imageMedium} 1024w` : "",
-		`${imageLarge} 1920w`,
-	]
-		.filter(Boolean)
-		.join(", ");
+const Image = memo(
+	({
+		imageLarge,
+		imageMedium,
+		imageSmall,
+		alt,
+		className,
+		width,
+		height,
+		...rest
+	}: CustomImageProps) => {
+		const srcSet = useMemo(() => {
+			const sources = [];
 
-	return (
-		<img
-			src={imageLarge}
-			srcSet={srcSet}
-			sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1920px"
-			alt={alt}
-			loading="lazy"
-			className={className}
-			width={width}
-			height={height}
-			{...rest}
-		/>
-	);
-};
+			if (imageSmall) sources.push(`${imageSmall} 640w`);
+			if (imageMedium) sources.push(`${imageMedium} 1024w`);
+			sources.push(`${imageLarge} 1920w`);
+
+			return sources.join(", ");
+		}, [imageLarge, imageMedium, imageSmall]);
+
+		return (
+			<img
+				src={imageLarge}
+				srcSet={srcSet}
+				sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1920px"
+				alt={alt}
+				loading="lazy"
+				className={className}
+				width={width}
+				height={height}
+				{...rest}
+			/>
+		);
+	},
+);
 
 export default Image;

@@ -1,30 +1,33 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useEffect, useMemo, useRef } from "react";
-import { Button } from "@/components/ui/Button";
+import {
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useMemo,
+	useRef,
+} from "react";
 import Channel from "@/components/ui/Channel";
 import Program from "@/components/ui/Program";
 import useEpgStore from "@/store/useEpgStore";
 import { getHoursHeaderFromDates } from "@/utils";
 import { HEIGHT_PROGRAM_CONTAINER, SIZE_BLOCK } from "@/utils/constants";
-import TimeLineFilter from "./TimeLineFilter";
 import TimeLineHours from "./TimeLineHours";
+import TimeLineNavigation from "./TimeLineNavigation";
 
 const TimeLine = () => {
 	const timesDivRef = useRef<HTMLDivElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	const channels = useEpgStore.getState();
-	const { entry, response } = channels.entry;
-	const { channels: channelsList } = response;
+	const { entry, response } = useEpgStore((state) => state.entry) || {};
 
-	const pxPerMinute = 6;
-	const slotWidth = 15 * pxPerMinute;
+	const channelsList = response?.channels || [];
+
 	const MAX_SCROLL_WIDTH = 5000;
 
 	const visibleHours = useMemo(() => {
+		if (!entry || !entry.date_from || !entry.date_to) return [];
 		return getHoursHeaderFromDates(entry.date_from, entry.date_to);
-	}, [entry.date_from, entry.date_to]);
+	}, [entry]);
 
 	const columnVirtualizer = useVirtualizer({
 		horizontal: false,
@@ -32,22 +35,28 @@ const TimeLine = () => {
 		getScrollElement: () => containerRef.current,
 		estimateSize: () => HEIGHT_PROGRAM_CONTAINER,
 		overscan: 20,
-		measureElement: (element) =>
-			element?.getBoundingClientRect().height ?? HEIGHT_PROGRAM_CONTAINER,
 	});
+
 	const channelsItems = columnVirtualizer.getVirtualItems();
 
-	const scrollBy = (amount: number) => {
-		if (containerRef.current) {
-			containerRef.current.scrollLeft += amount;
-		}
-	};
+	useLayoutEffect(() => {
+		columnVirtualizer.measure();
+	}, [columnVirtualizer]);
 
 	const totalSize = Math.min(
 		visibleHours.length * SIZE_BLOCK,
 		MAX_SCROLL_WIDTH,
 	);
 	const totalSizeChannels = channelsList.length * HEIGHT_PROGRAM_CONTAINER;
+
+	const formatHour = useCallback(
+		(unix: number) =>
+			new Date(unix * 1000).toLocaleTimeString([], {
+				hour: "2-digit",
+				minute: "2-digit",
+			}),
+		[],
+	);
 
 	useEffect(() => {
 		const el = containerRef.current;
@@ -82,38 +91,13 @@ const TimeLine = () => {
 			role="presentation"
 		>
 			<header className="top-0">
-				<TimeLineFilter />
 				<div className="w-[250px] h-[50px] text-center text-epg-baby-powder  flex items-center justify-center fixed z-10 bg-black">
 					<span>DIA</span>
 				</div>
-				<nav
-					className=" text-white flex items-center fixed z-20 right-0"
-					aria-label="Controles de desplazamiento temporal"
-				>
-					<Button
-						variant="ghost"
-						size="icon"
-						className="bg-black"
-						onClick={() => scrollBy(-slotWidth * 2)}
-						aria-label="Desplazar a la izquierda"
-					>
-						<ChevronLeft aria-hidden="true" size={20} />
-					</Button>
-					<Button
-						size="icon"
-						variant="ghost"
-						className="bg-black"
-						onClick={() => scrollBy(slotWidth * 2)}
-						aria-label="Desplazar a la derecha"
-					>
-						<ChevronRight aria-hidden="true" size={20} />
-					</Button>
-				</nav>
 
-				{/* Hours Header */}
+				<TimeLineNavigation ref={containerRef} />
 				<TimeLineHours ref={timesDivRef} visibleHours={visibleHours} />
 			</header>
-
 			<main
 				ref={containerRef}
 				className="flex flex-row w-full overflow-x-auto hide-scroll overflow-y-auto bg-black/10 scrollbar-hide"
@@ -133,7 +117,7 @@ const TimeLine = () => {
 				<aside
 					className="flex flex-col sticky z-10 bg-black left-0  [&>div]:w-[250px] [&>div]:h-[100px] [&>div]:shrink-0"
 					style={{
-						height: `${channelsList.length * HEIGHT_PROGRAM_CONTAINER}px`,
+						height: `${totalSizeChannels}px`,
 					}}
 					aria-label="List of channels"
 					data-testid="channels-list"
@@ -162,7 +146,7 @@ const TimeLine = () => {
 				<section
 					className="ml-[250px] border-2"
 					style={{
-						height: `${channelsList.length * HEIGHT_PROGRAM_CONTAINER}px`,
+						height: `${totalSizeChannels}px`,
 					}}
 					aria-label="Programs by channel"
 					data-testid="programs-by-channel-section"
@@ -189,14 +173,17 @@ const TimeLine = () => {
 									<ul className="flex lex-row flex-nowrap gap-1 overflow-x-auto overflow-y-auto [&>div]:shrink-0">
 										{events.map((event, index) => {
 											const { name, unix_begin, unix_end } = event;
+											const start = formatHour(unix_begin);
+											const end = formatHour(unix_end);
 											return (
 												<Program
+													description=""
 													key={`${index}-${ch.id}`}
 													name={name}
-													time={`${new Date(unix_begin * 1000).toLocaleTimeString()} - ${new Date(unix_end * 1000).toLocaleTimeString()}`}
+													time={`${start} - ${end}`}
 													width={SIZE_BLOCK}
 													height={HEIGHT_PROGRAM_CONTAINER}
-													aria-label={`Programs ${name} from ${new Date(unix_begin * 1000).toLocaleTimeString()} to ${new Date(unix_end * 1000).toLocaleTimeString()}`}
+													aria-label={`Program ${name} of ${start} to ${end}`}
 												/>
 											);
 										})}
