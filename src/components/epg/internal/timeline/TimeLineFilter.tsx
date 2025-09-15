@@ -1,8 +1,8 @@
+import { List } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import SliderPanel from "@/components/ui/SliderPanel";
 import { FILTER_TYPES, type FilterType } from "@/utils/constants";
-
 import CategoryFilterSlider from "../slider/CategoryFilterSlider";
 import ChannelFilterSlider from "../slider/ChannelFilterSlider";
 import ErrorFilterSlider from "../slider/ErrorFilterSlider";
@@ -38,42 +38,56 @@ const TimeLineFilter = () => {
 
 	return (
 		<section
-			className="flex flex-col sm:flex-row justify-end b gap-2 sm:gap-4 bg-black/65 p-2 w-full"
+			className="flex flex-col items-end  gap-2 sm:gap-4 bg-black/65 p-2 w-full"
 			aria-label="EPG guide filters"
 		>
+			{/* Mobile: show list icon */}
 			<Button
-				variant="secondary"
-				size="lg"
-				className="w-full sm:w-auto"
-				aria-label="Filter by channels"
-				onClick={() => activeContent(FILTER_TYPES.CHANNELS)}
+				className="sm:hidden"
+				aria-label="Abrir filtros"
+				variant="ghost"
+				onClick={() => setPanelOpen(true)}
 			>
-				CANALES
+				<List className="text-epg-baby-powder w-6 h-6" />
+				<span className="ml-2 text-epg-baby-powder">Filtros</span>
 			</Button>
-			<Button
-				variant="secondary"
-				size="lg"
-				onClick={() => activeContent(FILTER_TYPES.CATEGORIES)}
-				className="w-full sm:w-auto"
-				aria-label="Filter by categories"
-			>
-				CATEGORIAS
-			</Button>
-			<Button
-				variant="secondary"
-				size="lg"
-				className="w-full sm:w-auto"
-				aria-label="Filter by favorites"
-				onClick={() => activeContent(FILTER_TYPES.FAVORITES)}
-			>
-				FAVORITOS
-			</Button>
+
+			{/* Tablet/Desktop: show filter buttons */}
+			<div className="hidden sm:flex flex-row gap-4 w-full justify-end">
+				<Button
+					variant="secondary"
+					size="lg"
+					className="w-full sm:w-auto"
+					aria-label="Filter by channels"
+					onClick={() => activeContent(FILTER_TYPES.CHANNELS)}
+				>
+					CANALES
+				</Button>
+				<Button
+					variant="secondary"
+					size="lg"
+					onClick={() => activeContent(FILTER_TYPES.CATEGORIES)}
+					className="w-full sm:w-auto"
+					aria-label="Filter by categories"
+				>
+					CATEGORIAS
+				</Button>
+				<Button
+					variant="secondary"
+					size="lg"
+					className="w-full sm:w-auto"
+					aria-label="Filter by favorites"
+					onClick={() => activeContent(FILTER_TYPES.FAVORITES)}
+				>
+					FAVORITOS
+				</Button>
+			</div>
+
 			<SliderPanel
+				title="Filtrar"
 				open={panelOpen}
 				onClose={() => setPanelOpen(false)}
-				width="50vw"
 			>
-				<h2 className="text-lg font-bold mb-4">Filtrar canales</h2>
 				{renderPanelContent()}
 			</SliderPanel>
 		</section>

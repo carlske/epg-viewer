@@ -13,7 +13,6 @@ const SkeletonSlider = ({ open }: SkeletonSliderProps) => {
 					: ""
 			}
 		>
-			<Skeleton width="100%" height="40px" />
 			<div className="h-4" />
 			<Skeleton width="100%" height="200px" />
 			<div className="h-4" />

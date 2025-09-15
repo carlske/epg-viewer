@@ -1,11 +1,5 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
-import {
-	useCallback,
-	useEffect,
-	useLayoutEffect,
-	useMemo,
-	useRef,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import Channel from "@/components/ui/Channel";
 import Program from "@/components/ui/Program";
 import useEpgStore from "@/store/useEpgStore";
@@ -34,14 +28,10 @@ const TimeLine = () => {
 		count: channelsList.length,
 		getScrollElement: () => containerRef.current,
 		estimateSize: () => HEIGHT_PROGRAM_CONTAINER,
-		overscan: 20,
+		overscan: 10,
 	});
 
 	const channelsItems = columnVirtualizer.getVirtualItems();
-
-	useLayoutEffect(() => {
-		columnVirtualizer.measure();
-	}, [columnVirtualizer]);
 
 	const totalSize = Math.min(
 		visibleHours.length * SIZE_BLOCK,
@@ -61,13 +51,20 @@ const TimeLine = () => {
 	useEffect(() => {
 		const el = containerRef.current;
 		if (!el) return;
+		let rafId: number;
 		const onScroll = () => {
-			if (timesDivRef.current) {
-				timesDivRef.current.scrollLeft = el.scrollLeft;
-			}
+			if (rafId) cancelAnimationFrame(rafId);
+			rafId = requestAnimationFrame(() => {
+				if (timesDivRef.current) {
+					timesDivRef.current.scrollLeft = el.scrollLeft;
+				}
+			});
 		};
 		el.addEventListener("scroll", onScroll, { passive: true });
-		return () => el.removeEventListener("scroll", onScroll);
+		return () => {
+			el.removeEventListener("scroll", onScroll);
+			if (rafId) cancelAnimationFrame(rafId);
+		};
 	}, []);
 
 	return (
