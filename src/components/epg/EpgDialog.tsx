@@ -12,18 +12,31 @@ type DialogProps = {
 
 const EpgDialog = ({ open, onClose }: DialogProps) => {
 	const { data, error } = useEpgData();
-
 	const setEntry = useEpgStore((state) => state.setEntry);
 
 	useEffect(() => {
 		if (data) setEntry(data);
 	}, [data, setEntry]);
 
+	if (error) {
+		return (
+			<Dialog open={open} onClose={onClose}>
+				<div data-testid="error">Error loading EPG data</div>
+			</Dialog>
+		);
+	}
+
+	if (!data) {
+		return (
+			<Dialog open={open} onClose={onClose}>
+				<EpgcontentSkeleton />
+			</Dialog>
+		);
+	}
+
 	return (
 		<Dialog open={open} onClose={onClose}>
-			{!data && !error && <EpgcontentSkeleton />}
-			{error && <div data-testid="error">Error loading EPG data</div>}
-			{data && <Epgcontent />}
+			<Epgcontent />
 		</Dialog>
 	);
 };

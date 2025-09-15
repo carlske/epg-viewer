@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, startTransition } from "react";
 import useEpgStore from "@/store/useEpgStore";
 
 interface ProgramProps {
@@ -16,12 +16,14 @@ const Program = memo<ProgramProps>(
 		const setSelectedProgram = useEpgStore((state) => state.setSelectedProgram);
 
 		const handleMouseEnter = () => {
-			setSelectedProgram({
-				id: id ?? "",
-				name,
-				time,
-				channelId: channelId ?? "Channel ID not available",
-				description: description ?? "No description available",
+			startTransition(() => {
+				setSelectedProgram({
+					id: id ?? "",
+					name,
+					time,
+					channelId: channelId ?? "Channel ID not available",
+					description: description ?? "No description available",
+				});
 			});
 		};
 

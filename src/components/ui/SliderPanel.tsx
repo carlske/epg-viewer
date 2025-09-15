@@ -4,14 +4,15 @@ interface SliderPanelProps {
 	children: React.ReactNode;
 	width?: string;
 	open?: boolean;
+	title?: string;
 	onClose?: () => void;
 }
 
 const SliderPanel = ({
 	children,
-	width = "400px",
 	open = false,
 	onClose,
+	title = "Slider Title",
 }: SliderPanelProps) => {
 	return (
 		<>
@@ -22,18 +23,23 @@ const SliderPanel = ({
 				/>
 			)}
 			<div
-				className={`fixed top-0 right-0 h-full bg-epg-night shadow-lg transition-transform duration-300 z-50 ${open ? "translate-x-0" : "translate-x-full"}`}
-				style={{ width }}
+				className={`w-full sm:w-[40vw] fixed top-0 right-0 h-full bg-epg-night shadow-lg transition-transform duration-300 z-50 ${open ? "translate-x-0" : "translate-x-full"}`}
 				role="dialog"
 				aria-modal="true"
 			>
-				<Button
-					className="absolute top-4 right-4 text-gray-700"
-					aria-label="Close panel"
-					onClick={onClose}
-				>
-					&times;
-				</Button>
+				<header className="p-4 border-b border-gray-700">
+					<h2 className="text-lg text-epg-baby-powder font-bold mb-4">
+						{title}
+					</h2>
+
+					<Button
+						className="absolute top-4 right-4 text-gray-700"
+						aria-label="Close panel"
+						onClick={onClose}
+					>
+						&times;
+					</Button>
+				</header>
 
 				<div className="p-6 h-full overflow-y-auto text-epg-baby-powder">
 					{children}
